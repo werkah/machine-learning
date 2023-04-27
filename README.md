@@ -8,3 +8,4 @@
 | SVM                | lab4.py |
 | Decision trees     | lab5.py |
 | Ensemble methods   | lab6.py |
+| Data clustering   | lab7.py |
