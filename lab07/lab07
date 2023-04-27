@@ -1,0 +1,157 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+from sklearn.datasets import fetch_openml
+import numpy as np 
+mnist=fetch_openml('mnist_784', version=1, as_frame=False, parser='auto')
+mnist.target=mnist.target.astype(np.uint8)
+X=mnist["data"]
+y=mnist["target"]
+
+
+# In[2]:
+
+
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+
+# In[3]:
+
+
+kmeans_8 = KMeans(n_clusters=8,random_state=42)
+kmeans_9 = KMeans(n_clusters=9,random_state=42)
+kmeans_10 = KMeans(n_clusters=10,random_state=42)
+kmeans_11 = KMeans(n_clusters=11,random_state=42)
+kmeans_12 = KMeans(n_clusters=12,random_state=42)
+
+
+# In[5]:
+
+
+y_pred_8 = kmeans_8.fit_predict(X)
+y_pred_9 = kmeans_9.fit_predict(X)
+y_pred_10 = kmeans_10.fit_predict(X)
+y_pred_11 = kmeans_11.fit_predict(X)
+y_pred_12 = kmeans_12.fit_predict(X)
+
+
+# In[6]:
+
+
+sil_8 = silhouette_score(X,kmeans_8.labels_)
+sil_9 = silhouette_score(X,kmeans_9.labels_)
+sil_10 = silhouette_score(X,kmeans_10.labels_)
+sil_11 = silhouette_score(X,kmeans_11.labels_)
+sil_12 = silhouette_score(X,kmeans_12.labels_)
+
+
+# In[7]:
+
+
+scores = [sil_8, sil_9, sil_10, sil_11, sil_12]
+
+
+# In[8]:
+
+
+import pickle
+with open("kmeans_sil.pkl", 'wb') as file:
+    pickle.dump(scores, file)
+
+
+# In[14]:
+
+
+from sklearn.metrics import confusion_matrix
+conf_matrix10 = confusion_matrix(y, y_pred_10)
+conf_matrix10
+
+
+# In[10]:
+
+
+argsmax = []
+
+
+# In[16]:
+
+
+for row in conf_matrix10:
+    idx = np.argmax(row)
+    #print(idx)
+    if idx not in argsmax:
+        argsmax.append(idx)
+
+argsmax = np.sort(argsmax)
+#print(argsmax)
+
+
+# In[13]:
+
+
+with open("kmeans_argmax.pkl", 'wb') as file:
+    pickle.dump(argsmax, file)
+
+
+# In[17]:
+
+
+from sklearn.cluster import DBSCAN
+
+
+# In[18]:
+
+
+norm = []
+
+for i in range(300):
+    for j in range(len(X)):
+        if i == j:
+            continue
+        norm.append(np.linalg.norm(X[i] - X[j]))
+
+norms_sorted = np.unique(np.sort(norm))
+#print(norms_sorted)
+distance = norms_sorted[:10]
+#print(distance)
+
+
+# In[19]:
+
+
+with open("dist.pkl", 'wb') as file:
+    pickle.dump(distance, file)
+
+
+# In[20]:
+
+
+s = (distance[0]+distance[1]+distance[2])/3
+
+
+# In[22]:
+
+
+eps_val = np.arange(s, 1.1*s, step=0.04*s)
+dbscan_len = []
+
+
+# In[ ]:
+
+
+for x in eps_val:
+    dbscan = DBSCAN(eps=x)
+    dbscan.fit(X)
+    dbscan_len.append(len(set(dbscan.labels_)))
+
+
+# In[ ]:
+
+
+with open("dbscan_len.pkl", 'wb') as file:
+    pickle.dump(dbscan_len, file)
+
