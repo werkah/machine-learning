@@ -9,3 +9,5 @@
 | Decision trees     | lab05.py |
 | Ensemble methods   | lab06.py |
 | Data clustering   | lab07.py |
+| Dimensionsality reduction | lab08.py |
+| Neural networks | lab09.py |
