@@ -10,4 +10,6 @@
 | Ensemble methods   | lab06.py |
 | Data clustering   | lab07.py |
 | Dimensionsality reduction | lab08.py |
-| Neural networks | lab09.py |
+| Introduction to neural networks | lab09.py |
+| Neural networks with Keras | lab10.py |
+| Hyperparameters | lab11.py |
