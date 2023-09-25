@@ -13,3 +13,5 @@
 | Introduction to neural networks | lab09.py |
 | Neural networks with Keras | lab10.py |
 | Hyperparameters | lab11.py |
+| CNN | lab12.py |
+| RNN | lab13.py |
